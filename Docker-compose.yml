@@ -1,0 +1,90 @@
+version: '3'
+networks:
+  ddc-common-service:
+services:
+  postgres:
+    image: mentimeter/postgres-postgis:12-2.5
+    volumes:
+      - /Users/wuxuan/Documents/application/postgresql/data:/var/lib/postgresql/data
+    ports:
+      - target: 5432
+        protocol: tcp
+        mode: host
+        published: 5432
+    networks:
+      - ddc-common-service
+    environment:
+      - POSTGRES_PASSWORD=ch199407
+
+# Container Accounts: root/pivotal gpadmin/pivotal、 Gp db  gpadmin/gpadmin
+  greenplumn:
+    image: 1045005462/greenplum_postgis:6.11.2
+    volumes:
+      - /Users/wuxuan/Documents/application/greenplumn/data:/home/gpadmin
+    ports:
+      - target: 5432
+        protocol: tcp
+        mode: host
+        published: 15432
+    networks:
+      - ddc-common-service
+
+#  image-storage-manager-server:
+#    networks:
+#      - ddc-common-service
+#    build: ./image-storage-manager-server
+#    ports:
+#      - "8081:8080"
+#    volumes:
+#      - /Users/wuxuan/Documents/ddc/image:/opt/image
+#    environment:
+#      - spring.profiles.active=docker
+#      - com.diit.common.service.rpc.datasource-manager-context-path=http://192.168.0.238
+#
+#    depends_on:
+#      - postgres
+#    links:
+#      - "postgres:ddc-common-service"
+#      - "datasource-manager:datasource-manager"
+#    deploy:
+#      replicas: 1
+#
+#
+#  image-storage-manager-worker:
+#    networks:
+#      - ddc-common-service
+#    build: ./image-storage-manager-worker
+#    volumes:
+#      - /Users/wuxuan/Documents/ddc/image:/opt/image
+#    environment:
+#      - spring.profiles.active=docker
+#      - com.diit.common.service.rpc.datasource-manager-context-path=http://192.168.0.238
+#    depends_on:
+#      - postgres
+#    links:
+#      - "postgres:ddc-common-service"
+#      - "datasource-manager:datasource-manager"
+#    deploy:
+#      replicas: 1
+#
+#
+#  datasource-manager:
+#    networks:
+#      - ddc-common-service
+#    build: ../ddc-common-service-datasource-manager
+#    environment:
+#      - spring.profiles.active=docker
+#    ports:
+#      - "8083:8080"
+#    volumes:
+#      - /Users/wuxuan/Documents/ddc/image:/opt/image
+#    depends_on:
+#      - postgres
+#    links:
+#      - "postgres:ddc-common-service"
+#    deploy:
+#      replicas: 1
+
+
+
+
